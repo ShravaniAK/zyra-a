@@ -1,21 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
+// App.js (updated with error boundary)
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { AuthProvider } from './context/AuthContext';
+import { ProductProvider } from './context/ProductContext';
+import LandingScreen from './screens/LandingScreen';
+import LoginScreen from './screens/LoginScreen';
+import ProductListingScreen from './screens/ProductListingScreen';
+import ProductDetailScreen from './screens/ProductDetailScreen';
+import ErrorBoundary from './components/ErrorBoundary';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ErrorBoundary>
+      <AuthProvider>
+        <ProductProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Landing" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Landing" component={LandingScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="ProductListing" component={ProductListingScreen} />
+              <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ProductProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
